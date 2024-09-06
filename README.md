@@ -4,5 +4,5 @@
 
 - Angel Mauricio Lopez Miranda
 - Andres Daniel Lopez Molina
-- Etni Sarahi Castro Siera 
+- Etni Sarai Castro Siera 
 - Marco Flores Cid
