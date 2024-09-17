@@ -19,17 +19,47 @@ instance Show Prop where
                     show (Impl p q) = "(" ++ show p ++ " → " ++ show q ++ ")"
                     show (Syss p q) = "(" ++ show p ++ " ↔ " ++ show q ++ ")"
 
--- Fin de pre - código --
+p, q, r, s, t, u :: Prop
+p = Var "p"
+q = Var "q"
+r = Var "r"
+s = Var "s"
+t = Var "t"
+u = Var "u"
+
+negar :: Prop -> Prop
+negar (Var p) = Not (Var p)
+negar (Cons True) = (Cons False)
+negar (Cons False) = (Cons True)
+negar (Not f) = f
+negar (And f1 f2) = (Or (negar f1) (negar f2))
+negar (Or f1 f2) = (And (negar f1) (negar f2))
+negar (Impl f1 f2) = (And f1 (negar f2))
+negar (Syss f1 f2)= negar (And (Impl f1 f2) (Impl f2 f1)) 
 
 
--- E1.1 Implementar la funcion fnn que convierte una fórmula proproposicional en su forma normal negativa.
+distribuir :: Prop -> Prop
+distribuir (And p q) = And (distribuir p) (distribuir q)
+distribuir (Or (And p1 p2) q) = And (distribuir (Or p1 q)) (distribuir (Or p2 q))
+distribuir (Or p (And q1 q2)) = And (distribuir (Or p q1)) (distribuir (Or p q2))
+distribuir (Or p q) = Or (distribuir p) (distribuir q)
+distribuir p = p
 
---fnn :: Prop -> Prop
+--- E1.1 Implementar la funcion fnn que convierte una fórmula proproposicional en su forma normal negativa.
 
+fnn :: Prop -> Prop
+fnn (Var p) = (Var p)
+fnn (Not p) = negar p  
+fnn (And p q) = And (fnn p) (fnn q)  
+fnn (Or p q) = Or (fnn p) (fnn q)  
+fnn (Impl p q) = fnn (Or (Not p) q) 
+fnn (Syss p q) = fnn (And (Impl p q) (Impl q p))  
+  
 -- E1.2 Impementar la función fnc, que convierte una fórmula proposicional en su forma normal conjuntiva. Se recomienda usar la función fnn.
 
---fnc :: Prop -> Prop
-
+fnc :: Prop -> Prop
+fnc p = distribuir (fnn p)
+  
 -- E2.1 Crear un sinónimo Literal, que será igual a Prop por simplicidad, aunque solo deberían ser variables o negaciones de variables. 
 
 type Literal = Prop
