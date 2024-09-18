@@ -71,13 +71,9 @@ type Clausula = [Literal]
 -- E2.3 Definir la función clausulas que dada una fórmula en FNC, devuelve una lista con cláusulas que la forman.
 
 clausulas :: Prop -> [Clausula]
-clausulas (And p q) = union (clausulas p) (clausulas q)
-clausulas clause = case clause of
-  clause -> [lit clause]
-  where
-    lit :: Prop -> Clausula
-    lit (Or p q) = union (lit p) (lit q)
-    lit p = [p]
+clausulas (And p q) = clausulas p ++ clausulas q  
+clausulas (Or p q)  = [[p, q]]  
+clausulas p         = [[p]]
 
 -- E2.4 Definir la función resolución que dadas dos cláusulas, devuelve el resolvente obtenido después de aplicar la regla de resolución binaria. Se puede asumir que se puede obtener un resolvente a partir de los argumentos.
 
