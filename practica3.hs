@@ -77,7 +77,12 @@ clausulas p         = [[p]]
 
 -- E2.4 Definir la función resolución que dadas dos cláusulas, devuelve el resolvente obtenido después de aplicar la regla de resolución binaria. Se puede asumir que se puede obtener un resolvente a partir de los argumentos.
 
---resolucion :: Clausula -> Clausula -> Clausula 
+resolucion :: Clausula -> Clausula -> Clausula
+resolucion c1 c2 = [l | l <- (c1 ++ c2), not (negacion l `elem` c1 || negacion l `elem` c2)]
+  where
+    negacion (Not p) = p
+    negacion p = Not p
+
 
 -- E3.1 Definir la función hayResolvente, que determina si es posible obtener un resolvente a partir de dos cláusulas.
 
