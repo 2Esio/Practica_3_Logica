@@ -90,4 +90,8 @@ resolucion c1 c2 = [l | l <- (c1 ++ c2), not (negacion l `elem` c1 || negacion l
 
 -- E3.2 Definir la función saturacion, que dada una fórmula proposicional, determina si esta es satisfacible o no usando el algoritmo de saturación.
 
---saturacion :: Prop -> Bool
+saturacion :: [Clausula] -> Bool
+saturacion clausulas
+  | [] `elem` clausulas = False  -- Si hay una cláusula vacía, no es satisfacible
+  | otherwise = or [resolucion c1 c2 == [] | c1 <- clausulas, c2 <- clausulas, c1 /= c2]
+
