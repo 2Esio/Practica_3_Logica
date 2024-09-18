@@ -86,7 +86,13 @@ resolucion c1 c2 = [l | l <- (c1 ++ c2), not (negacion l `elem` c1 || negacion l
 
 -- E3.1 Definir la función hayResolvente, que determina si es posible obtener un resolvente a partir de dos cláusulas.
 
---hayResolvente :: Clausula -> Clausula -> Bool
+hayResolvente :: Clausula -> Clausula -> Bool
+hayResolvente c1 c2 = hayResolventeAux c1
+  where
+    hayResolventeAux [] = False
+    hayResolventeAux (l:ls) = (negacion l `elem` c2) || hayResolventeAux ls
+    negacion (Not p) = p
+    negacion p = Not p
 
 -- E3.2 Definir la función saturacion, que dada una fórmula proposicional, determina si esta es satisfacible o no usando el algoritmo de saturación.
 
